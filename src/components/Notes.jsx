@@ -102,6 +102,7 @@ function Notes() {
           ))}
         </ul>
       </section>
+      
     </div>
   )
 }
