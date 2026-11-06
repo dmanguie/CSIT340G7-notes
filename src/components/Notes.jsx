@@ -15,12 +15,28 @@ const initialNotes = [
 ]
 
 function Notes() {
-  const [notes] = useState(initialNotes)
+  const [notes, setNotes] = useState(initialNotes)
   const [form, setForm] = useState({ title: '', body: '' })
 
   const handleChange = (e) => {
     const { name, value } = e.target
     setForm({ ...form, [name]: value })
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    const title = form.title.trim()
+    const body = form.body.trim()
+
+    if (title === '' || body === '') return
+
+    setNotes([...notes, { id: Date.now(), title, body }])
+    setForm({ title: '', body: '' })
+  }
+
+  const handleDelete = (id) => {
+    setNotes(notes.filter((note) => note.id !== id))
   }
 
   return (
@@ -38,7 +54,7 @@ function Notes() {
           />
         </div>
 
-        <form className="grid gap-3">
+        <form className="grid gap-3" onSubmit={handleSubmit}>
           <p className="text-[13px] font-normal tracking-wide text-[#949494]">NEW NOTE</p>
           <input
             name="title"
@@ -77,6 +93,7 @@ function Notes() {
               <NoteCard title={note.title} body={note.body} />
               <button
                 type="button"
+                onClick={() => handleDelete(note.id)}
                 className="absolute top-4 right-5 cursor-pointer text-[26px] leading-none text-[#949494] hover:text-[#c18585]"
               >
                 ×
